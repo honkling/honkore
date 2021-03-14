@@ -1,0 +1,57 @@
+name: honkore
+version: ${project.version}
+main: me.honkling.honkore.Honkore
+api-version: 1.16
+prefix: honkore
+authors: [ honkling ]
+depend: [ Vault ]
+description: A Minecraft server core made by https://github.com/honkling
+commands:
+  gmc:
+    description: Changes your or another person's gamemode
+    aliases: [ gms, gma, gmsp ]
+    usage: §c/gmc [player]\n/gms [player]\n/gma [player]\n/gmsp [player]
+    permission: honkore.gamemode
+    permission-message: §cInsufficient permissions!
+  fly:
+    description: Toggles fly for you or another player
+    aliases: [ flight ]
+    usage: §c/fly [player]
+    permission: honkore.fly
+    permission-message: §cInsufficient permissions!
+  sc:
+    description: Staff chat.
+    usage: §c/sc [message]
+    permission: honkore.staffchat
+    permission-message: §cInsufficient permissions!
+  mutechat:
+    description: Mute the chat.
+    usage: §c/mutechat
+    aliases: [ chatmute, cmute, mchat ]
+    permission: honkore.mutechat
+    permission-message: §cInsufficient permissions!
+  clearchat:
+    description: Clear the chat.
+    usage: §c/clearchat
+    permission: honkore.clearchat
+    permission-message: §cInsufficient permissions!
+  report:
+    description: Report another user.
+    usage: §c/report (player) (reason)
+    permission: honkore.report
+    permission-message: §cInsufficient permissions!
+  reports:
+    description: View all reports.
+    usage: §c/reports
+    permission: honkore.reports
+    permission-message: §cInsufficient permissions!
+  resolve:
+    description: Resolve a report.
+    usage: §c/resolve (report id)
+    permission: honkore.resolve
+    permission-message: §cInsufficient permissions!
+  vanish:
+    description: Vanish from other players.
+    usage: §c/vanish
+    permission: honkore.vanish
+    permission-message: §cInsufficient permissions!
