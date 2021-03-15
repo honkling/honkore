@@ -13,6 +13,8 @@ public class ChatMuteListener implements Listener {
 	public ChatMuteListener(Honkore plugin) {
 		this.plugin = plugin;
 	}
+	
+	public ConfigurationFile config = plugin.getConfig();
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
@@ -20,7 +22,8 @@ public class ChatMuteListener implements Listener {
 		Player p = e.getPlayer();
 		if(plugin.chatMuted && !p.hasPermission("honkore.bypasschatmute")) {
 			e.setCancelled(true);
-			p.sendMessage("§7Chat is currently muted.");
+			String message = config.getString("Messages.mute-chat")
+			p.sendMessage(ChatColor.translateAlternativeColorCodes('&', message));
 		}
 	}
 
