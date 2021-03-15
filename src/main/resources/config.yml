@@ -4,3 +4,6 @@ report-system: true
 chat-tools: true
 utility-commands: true
 staff-chat: true
+
+Messages:
+  mute-chat: "&cChat is currently muted!"
