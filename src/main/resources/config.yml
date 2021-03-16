@@ -6,4 +6,46 @@ utility-commands: true
 staff-chat: true
 
 Messages:
-  mute-chat: "&cChat is currently muted!"
+
+  # Message sent when someone tries to chat while the chat is muted
+  chat-muted: "&cChat is currently muted!"
+
+  # Format for staff chat messages
+  staff-chat: "&d[STAFF] &7{PLAYER}: {MESSAGE}"
+  # {PLAYER} can be used to get the player sending the message
+  # {MESSAGE} can be used to get the message they sent
+
+  # Message sent when someone toggles their vanish
+  vanish: "&7Vanish has been {STATE}."
+  # {STATE} will be replaced with "enabled" or "disabled"
+
+  # Message sent when someone's fly mode is changed
+  set-fly: "&7Successfully {STATE} &3{PLAYER}&7's flight mode!"
+  # {STATE} will be replaced with "enabled" or "disabled"
+  # {PLAYER} will be replaced with the player who had their fly mode changed
+
+  # Message sent to the person when their flight mode has been changed
+  your-set-fly: "&7Your flight mode has been {STATE}!"
+  # {STATE} will be replaced with "enabled" or "disabled"
+
+  # Message sent when someone's gamemode is changed
+  set-gamemode: "&7Successfully set &3{PLAYER}&7's gamemode to &3{GAMEMODE}&7!"
+  # {GAMEMODE} will be replaced with the gamemode that was set
+  # {PLAYER} will be replaced with the player who's gamemode changed
+
+  # Message sent to the person when their gamemode has been changed
+  your-set-gamemode: "§7Your gamemode has been set to §3{GAMEMODE}!"
+  # {GAMEMODE} will replaced with the gamemode that was set
+
+  # Message sent when staff chat is toggled
+  toggle-staff-chat: "&7Staff chat has been {STATE}."
+  # {STATE} will be replaced with "enabled" or "disabled"
+
+  # Message sent after chat has been cleared
+  clear-chat: "&7Chat has been cleared by &3{PLAYER}"
+  # {PLAYER} will be replaced with the player who cleared the chat
+
+  # Message sent when chat is muted
+  mute-chat: "§7Chat has been &3{STATE}&7 by &3{PLAYER}"
+  # {STATE} will be replaced with "muted" or "unmuted"
+  # {PLAYER} will be replaced with the player who muted or unmuted chat

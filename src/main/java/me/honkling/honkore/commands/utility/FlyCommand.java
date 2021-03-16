@@ -1,10 +1,14 @@
 package me.honkling.honkore.commands.utility;
 
+import me.honkling.honkore.lib.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public class FlyCommand implements CommandExecutor {
@@ -16,9 +20,15 @@ public class FlyCommand implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		String SETFLY = "§7Successfully %s §3%s§7's flight mode!";
-		String YOURFLYSET = "§7Your flight mode has been %s!";
-		String NOTONLINE = "§3%s §7is not online!";
+
+		Plugin plugin = Bukkit.getPluginManager().getPlugin("honkore");
+		assert plugin != null;
+		FileConfiguration config = plugin.getConfig();
+
+		String SETFLY = config.getString("Messages.set-fly"); //"§7Successfully %s §3%s§7's flight mode!";
+
+		String YOURFLYSET = config.getString("Messages.your-set-fly"); //"§7Your flight mode has been %s!";
+		String NOTONLINE =  Utils.getNotOnlineMessage();
 		if(args.length > 0) {
 			boolean online = false;
 			for (Player player : Bukkit.getOnlinePlayers()) {
@@ -34,15 +44,21 @@ public class FlyCommand implements CommandExecutor {
 		Player target = Bukkit.getPlayer(args.length > 0 ? args[0] : p.getName());
 		if(target.getAllowFlight()) {
 			target.setAllowFlight(false);
-			p.sendMessage(String.format(SETFLY, "disabled", target.getName()));
+			SETFLY = SETFLY.replaceAll("\\{PLAYER}", target.getName());
+			SETFLY = SETFLY.replaceAll("\\{STATE}", "disabled");
+			p.sendMessage(Utils.format(SETFLY));
 			if(p != target) {
-				target.sendMessage(String.format(YOURFLYSET, "disabled"));
+				YOURFLYSET = YOURFLYSET.replaceAll("\\{STATE}", "disabled");
+				target.sendMessage(Utils.format(YOURFLYSET));
 			}
 		} else {
 			target.setAllowFlight(true);
-			p.sendMessage(String.format(SETFLY, "enabled", target.getName()));
+			SETFLY = SETFLY.replaceAll("\\{PLAYER}", target.getName());
+			SETFLY = SETFLY.replaceAll("\\{STATE}", "enabled");
+			p.sendMessage(Utils.format(SETFLY));
 			if(p != target) {
-				target.sendMessage(String.format(YOURFLYSET, "enabled"));
+				YOURFLYSET = YOURFLYSET.replaceAll("\\{STATE}", "disabled");
+				target.sendMessage(Utils.format(YOURFLYSET));
 			}
 		}
 		return true;

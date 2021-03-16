@@ -6,6 +6,7 @@ prefix: honkore
 authors: [ honkling ]
 depend: [ Vault ]
 description: A Minecraft server core made by https://github.com/honkling
+
 commands:
   gmc:
     description: Changes your or another person's gamemode
@@ -14,7 +15,7 @@ commands:
     permission: honkore.gamemode
     permission-message: §cInsufficient permissions!
   fly:
-    description: Toggles fly for you or another player
+    description: Toggles fly for you or another player, be free little birdies
     aliases: [ flight ]
     usage: §c/fly [player]
     permission: honkore.fly
@@ -55,3 +56,25 @@ commands:
     usage: §c/vanish
     permission: honkore.vanish
     permission-message: §cInsufficient permissions!
+
+permissions:
+  honkore.vanish:
+    description: Allows you to vanish
+  honkore.reports:
+    description: Allows you to view all reports
+  honkore.resolve:
+    description: Allows you to resolve a report
+  honkore.clearchat:
+    description: Allows you to clear chat
+  honkore.report:
+    description: Allows you to report
+  honkore.staffchat:
+    description: Allows access to staff chat
+  honkore.mutechat:
+    description: Allows you to mute chat
+  honkore.gamemode:
+    description: Allows you to access gamemode commands
+  honkore.fly:
+    description: Allows you to fly like a birdie
+  honkore.*:
+    children: [honkore.fly, honkore.gamemode, honkore.mutechat, honkore.staffchat, honkore.report, honkore.clearchat, honkore.resolve, honkore.reports, honkore.vanish]

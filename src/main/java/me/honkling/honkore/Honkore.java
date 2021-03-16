@@ -8,7 +8,6 @@ import me.honkling.honkore.commands.report.ResolveCommand;
 import me.honkling.honkore.commands.staffchat.StaffChatCommand;
 import me.honkling.honkore.commands.vanish.VanishCommand;
 import me.honkling.honkore.listeners.ChatMuteListener;
-import me.honkling.honkore.listeners.StaffChatListener;
 import me.honkling.honkore.listeners.VanishJoinListener;
 import me.honkling.honkore.listeners.VanishQuitListener;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,7 +35,6 @@ public final class Honkore extends JavaPlugin {
 		if(config.getBoolean("chat-tools")) {
 			Objects.requireNonNull(this.getCommand("mutechat")).setExecutor(new MuteChat(this));
 			Objects.requireNonNull(this.getCommand("clearchat")).setExecutor(new ClearChat());
-			this.getServer().getPluginManager().registerEvents(new ChatMuteListener(this), this);
 		}
 		if(config.getBoolean("utility-commands")) {
 			Objects.requireNonNull(this.getCommand("gmc")).setExecutor(new GamemodeCommand());
@@ -44,7 +42,7 @@ public final class Honkore extends JavaPlugin {
 		}
 		if(config.getBoolean("staff-chat")) {
 			Objects.requireNonNull(this.getCommand("sc")).setExecutor(new StaffChatCommand());
-			this.getServer().getPluginManager().registerEvents(new StaffChatListener(), this);
+			this.getServer().getPluginManager().registerEvents(new ChatMuteListener(this), this);
 		}
 		if(config.getBoolean("report-system")) {
 			Objects.requireNonNull(this.getCommand("report")).setExecutor(new ReportCommand(this));
@@ -92,6 +90,7 @@ public final class Honkore extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
+		getLogger().info("Bye! :)");
 	}
 
 }
