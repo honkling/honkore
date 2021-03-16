@@ -1,6 +1,7 @@
 package me.honkling.honkore.commands.moderation;
 
 import com.google.common.base.Strings;
+import me.honkling.honkore.lib.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,9 +14,7 @@ public class ClearChat implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 		if(sender instanceof Player) {
-			for(Player value : Bukkit.getOnlinePlayers()) {
-				value.sendMessage(Strings.repeat(" \n", 250) + "§7Chat has been cleared.");
-			}
+			Utils.clearChat(((Player) sender).getPlayer());
 		}
 		return true;
 	}
