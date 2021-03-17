@@ -23,9 +23,9 @@ A Minecraft server core made by [honkling](https://github.com/honkling).
 
 # Installing
 
-1. Download the latest version of honkore from [the Releases page](https://github.com/honkling/honkore) (NOTE: honkore likely will not support older versions than 1.16).
-2. Place the downloaded jar into your server's plugins folder.
-3. Restart your server.
+- Download the latest version of honkore from [the Releases page](https://github.com/honkling/honkore) (NOTE: honkore likely will not support older versions than 1.16).
+- Place the downloaded jar into your server's plugins folder.
+- Restart your server.
 
 # Contributing
 
