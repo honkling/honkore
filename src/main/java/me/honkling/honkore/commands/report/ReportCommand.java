@@ -11,11 +11,11 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
-import java.util.Date;
+import java.time.Instant;
 
 public class ReportCommand implements CommandExecutor {
 
@@ -45,20 +45,15 @@ public class ReportCommand implements CommandExecutor {
 				}
 			}
 			try {
-				Statement stmt = conn.createStatement();
-				stmt.executeUpdate("INSERT INTO reports (user, reporter, reason, date, id)" +
-						String.format("VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
-								args[0],
-								p.getName(),
-								sb.toString().trim(),
-								new java.sql.Date(new Date().getTime()),
-								this.generateID()));
-				Collection<? extends Player> staff = Bukkit.getOnlinePlayers();
-				for(Player member : staff) {
-					if(member.hasPermission("honkore.reports")) {
-						member.sendMessage(String.format("§3%s §7has filed a report against §3%s §7for §c%s§7.", p.getName(), args[0], sb.toString().trim()));
-					}
-				}
+				PreparedStatement stmt = conn.prepareStatement("INSERT INTO reports (user, reporter, reason, date, id)" +
+						"VALUES(?, ?, ?, ?, ?)");
+				stmt.setString(1, args[0]);
+				stmt.setString(2, p.getName());
+				stmt.setString(3, sb.toString().trim());
+				stmt.setDate(4, new java.sql.Date(Instant.now().getEpochSecond() * 1000));
+				stmt.setString(5, this.generateID());
+				stmt.executeUpdate();
+				Bukkit.broadcast(String.format("§3%s §7has filed a report against §3%s §7for §c%s§7.", p.getName(), args[0], sb.toString().trim()), "honkore.reports");
 				p.sendMessage(String.format("§7A report against %s has been sent to all online staff.", args[0]));
 			} catch (SQLException e) {
 				e.printStackTrace();

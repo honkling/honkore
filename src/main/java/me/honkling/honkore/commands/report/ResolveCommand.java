@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -26,8 +27,9 @@ public class ResolveCommand implements CommandExecutor {
 			Connection conn = this.plugin.conn;
 			if(args.length < 1) return false;
 			try {
-				Statement stmt = conn.createStatement();
-				stmt.executeUpdate(String.format("DELETE FROM reports WHERE id = \"%s\"", args[0].toUpperCase()));
+				PreparedStatement stmt = conn.prepareStatement("DELETE FROM reports WHERE id = ?");
+				stmt.setString(1, args[0].toUpperCase());
+				stmt.executeUpdate();
 				p.sendMessage("§7Successfully resolved the report.");
 			} catch (SQLException e) {
 				e.printStackTrace();

@@ -52,9 +52,9 @@ public class ReportsCommand implements CommandExecutor {
 			List<String> rows = new ArrayList<>();
 			while(rs.next()) rows.add(rs.getString("user"));
 			rs = stmt.executeQuery("SELECT * FROM reports");
+			rs.next();
 			int listSize = rows.size();
-			int firstRow = 0;
-			while(rs.getRow() < firstRow) rs.next();
+			if(listSize <= 0) return gui;
 			for(int i = 0; i < 54 && i <= listSize; i++) {
 				ItemStack reportItem = new ItemStack(Material.PLAYER_HEAD);
 				SkullMeta reportMeta = (SkullMeta) reportItem.getItemMeta();
@@ -64,14 +64,14 @@ public class ReportsCommand implements CommandExecutor {
 				lore.add("§7User reported: §3" + rs.getString("user"));
 				lore.add("§7Report author: §3" + rs.getString("reporter"));
 				lore.add("§7Reason: §3" + rs.getString("reason"));
-				lore.add("§7Date: §3" + rs.getString("date"));
+				lore.add("§7Date: §3" + rs.getDate("date").toString());
 				lore.add("§7ID: §3" + rs.getString("id"));
 				lore.add(" ");
 				lore.add(String.format("§7Run §3/resolve %s §7to resolve the report.", rs.getString("id")));
 				reportMeta.setLore(lore);
 				reportItem.setItemMeta(reportMeta);
 				gui.getSlot(gui.getFirstEmptySlot()).setItem(reportItem);
-				if(rs.getRow() < listSize) rs.next();
+				if(!rs.next()) break;
 			}
 			// it's a bandage solution for sure, ill probably look into the issue more later
 			//gui.getSlot(gui.getFirstEmptySlot() - 1).setItem(new ItemStack(Material.AIR));
