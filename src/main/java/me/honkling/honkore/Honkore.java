@@ -93,4 +93,12 @@ public final class Honkore extends JavaPlugin {
 		getLogger().info("Bye! :)");
 	}
 
+	/**
+	 * Gets an instance of the main Honkore class
+	 * @return Honkore
+	 */
+	public static Honkore getInstance() {
+		return getPlugin(Honkore.class);
+	}
+
 }
