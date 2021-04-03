@@ -16,7 +16,8 @@ public class Utils {
     public static void staffChat(Player player, String mesage) {
 
         for(Player member : Bukkit.getOnlinePlayers()) {
-            if(!member.hasPermission("honkore.staffchat")) { return; }
+            if (!member.hasPermission("honkore.staffchat"))
+                return;
 
             Plugin plugin = Bukkit.getPluginManager().getPlugin("honkore");
             assert plugin != null;
@@ -28,10 +29,9 @@ public class Utils {
                 return;
             }
             message = message.replaceAll("\\{PLAYER}", player.getName());
-            message = message.replaceAll("\\{MESSAGE}", message);
+            message = message.replaceAll("\\{MESSAGE}", mesage);
 
             member.sendMessage(format(message));
-
         }
 
     }
