@@ -19,7 +19,7 @@ public class GamemodeCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-		if(!(sender instanceof Player) && args.length == 0) {
+		if (!(sender instanceof Player) && args.length == 0) {
 			Bukkit.getLogger().info("§7You can't execute a gamemode command as console without providing a player!");
 			return true;
 		}
