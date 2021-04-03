@@ -1,18 +1,21 @@
 package me.honkling.honkore.commands.utility;
 
+import me.honkling.honkore.Honkore;
 import me.honkling.honkore.lib.Utils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public class GamemodeCommand implements CommandExecutor {
+
+	private final Honkore plugin = Honkore.getInstance();
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
@@ -20,67 +23,64 @@ public class GamemodeCommand implements CommandExecutor {
 			Bukkit.getLogger().info("§7You can't execute a gamemode command as console without providing a player!");
 			return true;
 		}
-		Player p = (Player) sender;
 
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("honkore");
-		assert plugin != null;
+		Player player = (Player) sender;
 		FileConfiguration config = plugin.getConfig();
 
-		String SETGM = config.getString("Messages.set-gamemode"); //"§7Successfully set §3%s§7's gamemode to §3%s§7!";
-		String YOURGMSET = config.getString("Messages.your-set-gamemode"); //"§7Your gamemode has been set to §3%s!";
+		Component setGamemodeComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.set-gamemode"));
+		Component yourSetGamemodeComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.your-set-gamemode"));
+		Component notOnlineComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Utils.getNotOnlineMessage());
 
-		String NOTONLINE = Utils.getNotOnlineMessage();
-		Player target = Bukkit.getPlayer(args.length > 0 ? args[0] : p.getName());
+		Player target = Bukkit.getPlayer(args.length > 0 ? args[0] : player.getName());
+
 		if(target == null) {
-
-			p.sendMessage(Utils.format(NOTONLINE));
+			player.sendMessage(notOnlineComponent);
 			return true;
-
 		}
 
 		switch (label) {
 			case "gmc":
-				assert target != null;
 				target.setGameMode(GameMode.CREATIVE);
-				SETGM = SETGM.replaceAll("\\{PLAYER}", target.getName());
-				SETGM = SETGM.replaceAll("\\{GAMEMODE}", "CREATIVE");
-				p.sendMessage(Utils.format(SETGM));
-				if(target != p) {
-					YOURGMSET = YOURGMSET.replaceAll("\\{GAMEMODE}", "CREATIVE");
-					target.sendMessage(Utils.format(YOURGMSET));
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{PLAYER}", target.getName());
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{GAMEMODE}", "CREATIVE");
+				player.sendMessage(setGamemodeComponent);
+
+				if(target != player) {
+					yourSetGamemodeComponent = Utils.translate(yourSetGamemodeComponent, "\\{GAMEMODE}", "CREATIVE");
+					target.sendMessage(yourSetGamemodeComponent);
 				}
 				break;
 			case "gms":
-				assert target != null;
 				target.setGameMode(GameMode.SURVIVAL);
-				SETGM = SETGM.replaceAll("\\{PLAYER}", target.getName());
-				SETGM = SETGM.replaceAll("\\{GAMEMODE}", "SURVIVAL");
-				p.sendMessage(Utils.format(SETGM));
-				if(target != p) {
-					YOURGMSET = YOURGMSET.replaceAll("\\{GAMEMODE}", "SURVIVAL");
-					target.sendMessage(Utils.format(YOURGMSET));
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{PLAYER}", target.getName());
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{GAMEMODE}", "SURVIVAL");
+				player.sendMessage(setGamemodeComponent);
+
+				if(target != player) {
+					yourSetGamemodeComponent = Utils.translate(yourSetGamemodeComponent, "\\{GAMEMODE}", "SURVIVAL");
+					target.sendMessage(yourSetGamemodeComponent);
 				}
 				break;
 			case "gma":
-				assert target != null;
 				target.setGameMode(GameMode.ADVENTURE);
-				SETGM = SETGM.replaceAll("\\{PLAYER}", target.getName());
-				SETGM = SETGM.replaceAll("\\{GAMEMODE}", "ADVENTURE");
-				p.sendMessage(Utils.format(SETGM));
-				if(target != p) {
-					YOURGMSET = YOURGMSET.replaceAll("\\{GAMEMODE}", "ADVENTURE");
-					target.sendMessage(Utils.format(YOURGMSET));
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{PLAYER}", target.getName());
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{GAMEMODE}", "ADVENTURE");
+				player.sendMessage(setGamemodeComponent);
+
+				if(target != player) {
+					yourSetGamemodeComponent = Utils.translate(yourSetGamemodeComponent, "\\{GAMEMODE}", "ADVENTURE");
+					target.sendMessage(yourSetGamemodeComponent);
 				}
 				break;
 			case "gmsp":
-				assert target != null;
 				target.setGameMode(GameMode.SPECTATOR);
-				SETGM = SETGM.replaceAll("\\{PLAYER}", target.getName());
-				SETGM = SETGM.replaceAll("\\{GAMEMODE}", "SPECTATOR");
-				p.sendMessage(Utils.format(SETGM));
-				if(target != p) {
-					YOURGMSET = YOURGMSET.replaceAll("\\{GAMEMODE}", "SPECTATOR");
-					target.sendMessage(Utils.format(YOURGMSET));
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{PLAYER}", target.getName());
+				setGamemodeComponent = Utils.translate(setGamemodeComponent, "\\{GAMEMODE}", "SPECTATOR");
+				player.sendMessage(setGamemodeComponent);
+
+				if(target != player) {
+					yourSetGamemodeComponent = Utils.translate(yourSetGamemodeComponent, "\\{GAMEMODE}", "SPECTATOR");
+					target.sendMessage(yourSetGamemodeComponent);
 				}
 				break;
 			default:

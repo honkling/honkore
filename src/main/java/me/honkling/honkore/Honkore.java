@@ -34,7 +34,7 @@ public final class Honkore extends JavaPlugin {
 		saveDefaultConfig();
 		FileConfiguration config = getConfig();
 		if(config.getBoolean("chat-tools")) {
-			getCommand("mutechat").setExecutor(new MuteChat(this));
+			getCommand("mutechat").setExecutor(new MuteChat());
 			getCommand("clearchat").setExecutor(new ClearChat());
 		}
 		if(config.getBoolean("utility-commands")) {
@@ -43,7 +43,7 @@ public final class Honkore extends JavaPlugin {
 		}
 		if(config.getBoolean("staff-chat")) {
 			getCommand("sc").setExecutor(new StaffChatCommand());
-			getServer().getPluginManager().registerEvents(new ChatMuteListener(this), this);
+			getServer().getPluginManager().registerEvents(new ChatMuteListener(), this);
 		}
 		if(config.getBoolean("report-system")) {
 			getCommand("report").setExecutor(new ReportCommand(this));

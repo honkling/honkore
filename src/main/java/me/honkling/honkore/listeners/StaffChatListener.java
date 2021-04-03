@@ -1,6 +1,8 @@
 package me.honkling.honkore.listeners;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import me.honkling.honkore.lib.Utils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,11 +13,10 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
  */
 public class StaffChatListener implements Listener {
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onChatMessage(AsyncPlayerChatEvent e) {
+	public void onChatMessage(AsyncChatEvent e) {
 		Player p = e.getPlayer();
-		String msg = e.getMessage();
+		Component msg = e.message();
 
 		if (p.hasMetadata("staffchat")) {
 			if (p.getMetadata("staffchat").get(0).asBoolean()) {
