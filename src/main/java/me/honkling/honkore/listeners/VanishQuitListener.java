@@ -18,7 +18,6 @@ public class VanishQuitListener implements Listener {
 		p.removeMetadata("vanish", plugin);
 
 		for(Player member : Bukkit.getOnlinePlayers()) {
-			p.showPlayer(plugin, member);
 			member.showPlayer(plugin, p);
 		}
 	}
