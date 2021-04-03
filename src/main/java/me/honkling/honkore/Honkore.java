@@ -33,24 +33,24 @@ public final class Honkore extends JavaPlugin {
 		saveDefaultConfig();
 		FileConfiguration config = getConfig();
 		if(config.getBoolean("chat-tools")) {
-			Objects.requireNonNull(getCommand("mutechat")).setExecutor(new MuteChat(this));
-			Objects.requireNonNull(getCommand("clearchat")).setExecutor(new ClearChat());
+			getCommand("mutechat").setExecutor(new MuteChat(this));
+			getCommand("clearchat").setExecutor(new ClearChat());
 		}
 		if(config.getBoolean("utility-commands")) {
-			Objects.requireNonNull(getCommand("gmc")).setExecutor(new GamemodeCommand());
-			Objects.requireNonNull(getCommand("fly")).setExecutor(new FlyCommand());
+			getCommand("gmc").setExecutor(new GamemodeCommand());
+			getCommand("fly").setExecutor(new FlyCommand());
 		}
 		if(config.getBoolean("staff-chat")) {
-			Objects.requireNonNull(getCommand("sc")).setExecutor(new StaffChatCommand());
+			getCommand("sc").setExecutor(new StaffChatCommand());
 			getServer().getPluginManager().registerEvents(new ChatMuteListener(this), this);
 		}
 		if(config.getBoolean("report-system")) {
-			Objects.requireNonNull(getCommand("report")).setExecutor(new ReportCommand(this));
-			Objects.requireNonNull(getCommand("reports")).setExecutor(new ReportsCommand(this));
-			Objects.requireNonNull(getCommand("resolve")).setExecutor(new ResolveCommand(this));
+			getCommand("report").setExecutor(new ReportCommand(this));
+			getCommand("reports").setExecutor(new ReportsCommand(this));
+			getCommand("resolve").setExecutor(new ResolveCommand(this));
 		}
 		if(config.getBoolean("vanish-system")) {
-			Objects.requireNonNull(getCommand("vanish")).setExecutor(new VanishCommand());
+			getCommand("vanish").setExecutor(new VanishCommand());
 			getServer().getPluginManager().registerEvents(new VanishJoinListener(), this);
 			getServer().getPluginManager().registerEvents(new VanishQuitListener(), this);
 		}
