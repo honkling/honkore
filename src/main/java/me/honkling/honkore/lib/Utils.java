@@ -2,10 +2,7 @@ package me.honkling.honkore.lib;
 
 import com.google.common.base.Strings;
 import me.honkling.honkore.Honkore;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -52,9 +49,8 @@ public class Utils {
         for(Player player : Bukkit.getOnlinePlayers()) {
 
             String message = plugin.getConfig().getString("Messages.clear-chat");
-            Component component = Component.text(Strings.repeat(" \n", 250));
-            component.append(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
 
+            Component component = Component.text(Strings.repeat(" \n", 250)).append(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
             component = translate(component, "\\{PLAYER}", clearer.getName());
 
             player.sendMessage(component);
