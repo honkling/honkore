@@ -30,31 +30,31 @@ public final class Honkore extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		getLogger().info("honkore has enabled :)");
-		this.saveDefaultConfig();
-		FileConfiguration config = this.getConfig();
+		saveDefaultConfig();
+		FileConfiguration config = getConfig();
 		if(config.getBoolean("chat-tools")) {
-			Objects.requireNonNull(this.getCommand("mutechat")).setExecutor(new MuteChat(this));
-			Objects.requireNonNull(this.getCommand("clearchat")).setExecutor(new ClearChat());
+			Objects.requireNonNull(getCommand("mutechat")).setExecutor(new MuteChat(this));
+			Objects.requireNonNull(getCommand("clearchat")).setExecutor(new ClearChat());
 		}
 		if(config.getBoolean("utility-commands")) {
-			Objects.requireNonNull(this.getCommand("gmc")).setExecutor(new GamemodeCommand());
-			Objects.requireNonNull(this.getCommand("fly")).setExecutor(new FlyCommand());
+			Objects.requireNonNull(getCommand("gmc")).setExecutor(new GamemodeCommand());
+			Objects.requireNonNull(getCommand("fly")).setExecutor(new FlyCommand());
 		}
 		if(config.getBoolean("staff-chat")) {
-			Objects.requireNonNull(this.getCommand("sc")).setExecutor(new StaffChatCommand());
-			this.getServer().getPluginManager().registerEvents(new ChatMuteListener(this), this);
+			Objects.requireNonNull(getCommand("sc")).setExecutor(new StaffChatCommand());
+			getServer().getPluginManager().registerEvents(new ChatMuteListener(this), this);
 		}
 		if(config.getBoolean("report-system")) {
-			Objects.requireNonNull(this.getCommand("report")).setExecutor(new ReportCommand(this));
-			Objects.requireNonNull(this.getCommand("reports")).setExecutor(new ReportsCommand(this));
-			Objects.requireNonNull(this.getCommand("resolve")).setExecutor(new ResolveCommand(this));
+			Objects.requireNonNull(getCommand("report")).setExecutor(new ReportCommand(this));
+			Objects.requireNonNull(getCommand("reports")).setExecutor(new ReportsCommand(this));
+			Objects.requireNonNull(getCommand("resolve")).setExecutor(new ResolveCommand(this));
 		}
 		if(config.getBoolean("vanish-system")) {
-			Objects.requireNonNull(this.getCommand("vanish")).setExecutor(new VanishCommand());
-			this.getServer().getPluginManager().registerEvents(new VanishJoinListener(), this);
-			this.getServer().getPluginManager().registerEvents(new VanishQuitListener(), this);
+			Objects.requireNonNull(getCommand("vanish")).setExecutor(new VanishCommand());
+			getServer().getPluginManager().registerEvents(new VanishJoinListener(), this);
+			getServer().getPluginManager().registerEvents(new VanishQuitListener(), this);
 		}
-		String dataFolder = this.getDataFolder().getAbsolutePath() + (this.getDataFolder().getAbsolutePath().endsWith("/") || this.getDataFolder().getAbsolutePath().endsWith("\\") ? "" : "/");
+		String dataFolder = getDataFolder().getAbsolutePath() + (getDataFolder().getAbsolutePath().endsWith("/") || getDataFolder().getAbsolutePath().endsWith("\\") ? "" : "/");
 		String dbUrl = String.format("jdbc:sqlite:%sinfo.db", dataFolder);
 		try {
 			conn = DriverManager.getConnection(dbUrl);
