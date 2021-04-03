@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.honkling.honkore.commands.utility.GamemodeCommand;
 import me.honkling.honkore.commands.utility.FlyCommand;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -54,8 +55,7 @@ public final class Honkore extends JavaPlugin {
 			getServer().getPluginManager().registerEvents(new VanishJoinListener(), this);
 			getServer().getPluginManager().registerEvents(new VanishQuitListener(), this);
 		}
-		String dataFolder = getDataFolder().getAbsolutePath() + (getDataFolder().getAbsolutePath().endsWith("/") || getDataFolder().getAbsolutePath().endsWith("\\") ? "" : "/");
-		String dbUrl = String.format("jdbc:sqlite:%sinfo.db", dataFolder);
+		String dbUrl = String.format("jdbc:sqlite:%sinfo.db", getDataFolder() + File.separator);
 		try {
 			conn = DriverManager.getConnection(dbUrl);
 			Statement stmt = conn.createStatement();
