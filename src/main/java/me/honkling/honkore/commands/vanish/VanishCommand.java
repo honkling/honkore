@@ -1,6 +1,9 @@
 package me.honkling.honkore.commands.vanish;
 
+import me.honkling.honkore.Honkore;
 import me.honkling.honkore.lib.Utils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,22 +17,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class VanishCommand implements CommandExecutor {
 
+	private final Honkore plugin = Honkore.getInstance();
+
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
-
-
 		if(sender instanceof Player) {
-			Player p = (Player) sender;
-			boolean isEnabled = p.hasMetadata("vanish") && p.getMetadata("vanish").get(0).asBoolean();
-			Plugin plugin = Bukkit.getPluginManager().getPlugin("honkore");
-			assert plugin != null;
+			Player player = (Player) sender;
+			boolean isEnabled = player.hasMetadata("vanish") && player.getMetadata("vanish").get(0).asBoolean();
+			player.setMetadata("vanish", new FixedMetadataValue(plugin, !isEnabled));
 
-			FileConfiguration config = plugin.getConfig();
-
-			p.setMetadata("vanish", new FixedMetadataValue(plugin, !isEnabled));
-
-			String message = config.getString("Messages.vanish");
+			String message = plugin.getConfig().getString("Messages.vanish");
 			if (message == null) {
 				plugin.getLogger().warning("Vanish message has not been defined. Skipping...");
 				return true;
@@ -37,20 +35,20 @@ public class VanishCommand implements CommandExecutor {
 
 			String enable = !isEnabled ? "enabled" : "disabled";
 
-			message = message.replaceAll("\\{STATE}", enable);
-
-			p.sendMessage(Utils.format(message));
+			Component vanishComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+			vanishComponent = Utils.translate(vanishComponent, "\\{STATE}", enable);
+			player.sendMessage(vanishComponent);
 
 			if(!isEnabled) {
 				for(Player member : Bukkit.getOnlinePlayers()) {
-					if(member != p && !member.hasPermission("honkore.vanish")) {
-						member.hidePlayer(plugin, p);
+					if(member != player && !member.hasPermission("honkore.vanish")) {
+						member.hidePlayer(plugin, player);
 					}
 				}
 			} else {
 				for(Player member : Bukkit.getOnlinePlayers()) {
-					if(member != p) {
-						member.showPlayer(plugin, p);
+					if(member != player) {
+						member.showPlayer(plugin, player);
 					}
 				}
 			}

@@ -1,7 +1,9 @@
 package me.honkling.honkore.listeners;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import me.honkling.honkore.Honkore;
 import me.honkling.honkore.lib.Utils;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -11,25 +13,24 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatMuteListener implements Listener {
 
-	private Honkore plugin;
+	private final Honkore plugin = Honkore.getInstance();
 
-	public ChatMuteListener(Honkore plugin) {
-		this.plugin = plugin;
-	}
-
-	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onChatMessage(AsyncPlayerChatEvent e) {
-		FileConfiguration config = plugin.getConfig();
+	public void onChatMessage(AsyncChatEvent e) {
 		Player p = e.getPlayer();
+
 		if(plugin.chatMuted && !p.hasPermission("honkore.bypasschatmute")) {
 			e.setCancelled(true);
-			String message = config.getString("Messages.chat-muted");
+			String message = plugin.getConfig().getString("Messages.chat-muted");
+
 			if (message == null) {
 				plugin.getLogger().warning("Mute chat message has not been defined. Skipping...");
 				return;
 			}
-			if (message.length() > 0) p.sendMessage(Utils.format(message));
+
+			if (message.length() > 0) {
+				p.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+			}
 		}
 	}
 

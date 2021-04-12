@@ -2,6 +2,8 @@ package me.honkling.honkore.commands.staffchat;
 
 import me.honkling.honkore.Honkore;
 import me.honkling.honkore.lib.Utils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,24 +19,26 @@ import java.util.Collection;
 
 public class StaffChatCommand implements CommandExecutor {
 
+	private final Honkore plugin = Honkore.getInstance();
+
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 		if(sender instanceof Player) {
-			Player p = (Player) sender;
+			Player player = (Player) sender;
+
 			if(args.length > 0) {
 				String msg = String.join(" ", args);
-				Utils.staffChat(p.getPlayer(), msg);
-			} else {
-				boolean isEnabled = p.hasMetadata("staffchat") && p.getMetadata("staffchat").get(0).asBoolean();
-				Plugin plugin = Bukkit.getPluginManager().getPlugin("honkore");
-				assert plugin != null;
-				p.setMetadata("staffchat", new FixedMetadataValue(plugin, !isEnabled));
-
-				FileConfiguration config = plugin.getConfig();
-				String message = config.getString("Messages.toggle-staff-chat");
-				message = message.replaceAll("\\{STATE}", !isEnabled ? "enabled" : "disabled");
-				p.sendMessage(Utils.format(message));
+				Utils.staffChat(player.getPlayer(), Component.text(msg));
+				return true;
 			}
+
+			boolean isEnabled = player.hasMetadata("staffchat") && player.getMetadata("staffchat").get(0).asBoolean();
+			player.setMetadata("staffchat", new FixedMetadataValue(plugin, !isEnabled));
+
+			Component toggleStaffChatComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("Messages.toggle-staff-chat"));
+
+			toggleStaffChatComponent = Utils.translate(toggleStaffChatComponent, "\\{STATE}", !isEnabled ? "enabled" : "disabled");
+			player.sendMessage(toggleStaffChatComponent);
 		}
 		return true;
 	}

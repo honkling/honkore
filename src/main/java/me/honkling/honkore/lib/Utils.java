@@ -1,57 +1,86 @@
 package me.honkling.honkore.lib;
 
 import com.google.common.base.Strings;
+import me.honkling.honkore.Honkore;
+import net.kyori.adventure.text.*;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.intellij.lang.annotations.RegExp;
+
+import java.util.regex.Pattern;
 
 public class Utils {
+
+    private static final Honkore plugin = Honkore.getInstance();
 
     public static String getNotOnlineMessage() {
         return "§3%s §7is not online!";
     }
 
-    public static void staffChat(Player player, String mesage) {
+    public static void staffChat(Player player, Component message) {
 
         for(Player member : Bukkit.getOnlinePlayers()) {
             if (!member.hasPermission("honkore.staffchat"))
                 return;
 
-            Plugin plugin = Bukkit.getPluginManager().getPlugin("honkore");
-            assert plugin != null;
-            FileConfiguration config = plugin.getConfig();
-
-            String message = config.getString("Messages.staff-chat");
-            if (message == null) {
+            String formattedMessage = plugin.getConfig().getString("Messages.staff-chat");
+            if (formattedMessage == null) {
                 plugin.getLogger().warning("Staff chat message has not been defined. Skipping...");
                 return;
             }
-            message = message.replaceAll("\\{PLAYER}", player.getName());
-            message = message.replaceAll("\\{MESSAGE}", mesage);
 
-            member.sendMessage(format(message));
+            Component componentMessage = LegacyComponentSerializer.legacyAmpersand().deserialize(formattedMessage);
+            componentMessage = translate(componentMessage, "\\{PLAYER}", player.getName());
+            componentMessage = translate(componentMessage, "\\{MESSAGE}", message);
+
+            member.sendMessage(componentMessage);
         }
 
-    }
-
-    public static String format(String toform) {
-        return ChatColor.translateAlternateColorCodes('&', toform);
     }
 
     public static void clearChat(Player clearer) {
-        for(Player value : Bukkit.getOnlinePlayers()) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
 
-            Plugin plugin = Bukkit.getPluginManager().getPlugin("honkore");
-            assert plugin != null;
-            FileConfiguration config = plugin.getConfig();
+            String message = plugin.getConfig().getString("Messages.clear-chat");
 
-            String message = config.getString("Messages.clear-chat");
-            message = message.replaceAll("\\{PLAYER}", clearer.getName());
-            value.sendMessage(Strings.repeat(" \n", 250) + format(message));
+            Component component = Component.text(Strings.repeat(" \n", 250)).append(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+            component = translate(component, "\\{PLAYER}", clearer.getName());
+
+            player.sendMessage(component);
         }
     }
 
+    /**
+     * Replaces a string within a message
+     * @param message Component
+     * @param key @RegExp String
+     * @param replacement String
+     * @return Component
+     */
+    public static Component translate(Component message, @RegExp String key, String replacement) {
+        return message.replaceText(builder -> {
+            builder.match(key).replacement(replacement);
+        });
+    }
+
+    /**
+     * Replaces a string within a message
+     * @param message Component
+     * @param key @RegExp String
+     * @param replacement Component
+     * @return Component
+     */
+    public static Component translate(Component message, @RegExp String key, Component replacement) {
+        return message.replaceText(builder -> {
+            builder.match(key).replacement(replacement);
+        });
+    }
 
 }
