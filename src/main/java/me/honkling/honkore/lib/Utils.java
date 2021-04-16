@@ -2,19 +2,11 @@ package me.honkling.honkore.lib;
 
 import com.google.common.base.Strings;
 import me.honkling.honkore.Honkore;
-import net.kyori.adventure.text.*;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.intellij.lang.annotations.RegExp;
-
-import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -50,6 +42,7 @@ public class Utils {
 
             String message = plugin.getConfig().getString("Messages.clear-chat");
 
+            assert message != null;
             Component component = Component.text(Strings.repeat(" \n", 250)).append(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
             component = translate(component, "\\{PLAYER}", clearer.getName());
 
@@ -65,9 +58,7 @@ public class Utils {
      * @return Component
      */
     public static Component translate(Component message, @RegExp String key, String replacement) {
-        return message.replaceText(builder -> {
-            builder.match(key).replacement(replacement);
-        });
+        return message.replaceText(builder -> builder.match(key).replacement(replacement));
     }
 
     /**
@@ -78,9 +69,7 @@ public class Utils {
      * @return Component
      */
     public static Component translate(Component message, @RegExp String key, Component replacement) {
-        return message.replaceText(builder -> {
-            builder.match(key).replacement(replacement);
-        });
+        return message.replaceText(builder -> builder.match(key).replacement(replacement));
     }
 
 }
