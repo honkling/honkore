@@ -25,10 +25,10 @@ public class QuitListener implements Listener {
 			}
 		}
 		if(plugin.getConfig().getBoolean("join-leave")) {
-			String message = plugin.getConfig().getString("Messages.leave-message");
+			String message = plugin.getConfig().getString("Messages.quit-message");
 
 			if(message == null) {
-				plugin.getLogger().warning("Join message has not been defined. Skipping...");
+				plugin.getLogger().warning("Quit message has not been defined. Skipping...");
 				return;
 			}
 
