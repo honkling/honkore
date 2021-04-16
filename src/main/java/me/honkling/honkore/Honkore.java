@@ -7,9 +7,9 @@ import me.honkling.honkore.commands.report.ReportsCommand;
 import me.honkling.honkore.commands.report.ResolveCommand;
 import me.honkling.honkore.commands.staffchat.StaffChatCommand;
 import me.honkling.honkore.commands.vanish.VanishCommand;
-import me.honkling.honkore.listeners.ChatMuteListener;
-import me.honkling.honkore.listeners.VanishJoinListener;
-import me.honkling.honkore.listeners.VanishQuitListener;
+import me.honkling.honkore.listeners.ChatListener;
+import me.honkling.honkore.listeners.JoinListener;
+import me.honkling.honkore.listeners.QuitListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,7 +21,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Objects;
 
 public final class Honkore extends JavaPlugin {
 
@@ -36,7 +35,6 @@ public final class Honkore extends JavaPlugin {
 		if(config.getBoolean("chat-tools")) {
 			getCommand("mutechat").setExecutor(new MuteChat());
 			getCommand("clearchat").setExecutor(new ClearChat());
-      getServer().getPluginManager().registerEvents(new ChatMuteListener(), this);
 		}
 		if(config.getBoolean("utility-commands")) {
 			getCommand("gmc").setExecutor(new GamemodeCommand());
@@ -52,8 +50,13 @@ public final class Honkore extends JavaPlugin {
 		}
 		if(config.getBoolean("vanish-system")) {
 			getCommand("vanish").setExecutor(new VanishCommand());
-			getServer().getPluginManager().registerEvents(new VanishJoinListener(), this);
-			getServer().getPluginManager().registerEvents(new VanishQuitListener(), this);
+		}
+		if(config.getBoolean("vanish-system") || config.getBoolean("join-leave")) {
+			getServer().getPluginManager().registerEvents(new JoinListener(), this);
+			getServer().getPluginManager().registerEvents(new QuitListener(), this);
+		}
+		if(config.getBoolean("staff-chat") || config.getBoolean("chat-tools") || config.getBoolean("chat-format")) {
+			getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		}
 		String dbUrl = String.format("jdbc:sqlite:%sinfo.db", getDataFolder() + File.separator);
 		try {

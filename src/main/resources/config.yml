@@ -4,6 +4,8 @@ report-system: true
 chat-tools: true
 utility-commands: true
 staff-chat: true
+join-leave: true
+chat-format: true
 
 Messages:
 
@@ -34,7 +36,7 @@ Messages:
   # {PLAYER} will be replaced with the player who's gamemode changed
 
   # Message sent to the person when their gamemode has been changed
-  your-set-gamemode: "§7Your gamemode has been set to §3{GAMEMODE}!"
+  your-set-gamemode: "&7Your gamemode has been set to &3{GAMEMODE}!"
   # {GAMEMODE} will replaced with the gamemode that was set
 
   # Message sent when staff chat is toggled
@@ -46,6 +48,17 @@ Messages:
   # {PLAYER} will be replaced with the player who cleared the chat
 
   # Message sent when chat is muted
-  mute-chat: "§7Chat has been &3{STATE}&7 by &3{PLAYER}"
+  mute-chat: "&7Chat has been {STATE} by &3{PLAYER}"
   # {STATE} will be replaced with "muted" or "unmuted"
   # {PLAYER} will be replaced with the player who muted or unmuted chat
+
+  # Chat format
+  chat-format: "&7{DISPLAYNAME}: {MESSAGE}"
+
+  # Message sent when a user joins
+  join-message: "&8[&a+&8] {DISPLAYNAME}"
+  # {DISPLAYNAME} will be replaced the player's prefix (if any), the player's name, and the player's suffix (if any)
+
+  # Message sent when a user leaves
+  quit-message: "&8[&c-&8] {DISPLAYNAME}"
+  # {DISPLAYNAME} will be replaced the player's prefix (if any), the player's name, and the player's suffix (if any)
