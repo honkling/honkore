@@ -16,23 +16,23 @@ public class JoinListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent e) {
-		if(plugin.getConfig().getBoolean("vanish-system")) {
+		if(plugin.config.getBoolean("vanish-system")) {
 			Player executor = e.getPlayer();
 
-			if (!executor.hasPermission("honkore.vanish"))
-				return;
-
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (executor.hasMetadata("vanish"))
-					if (executor.getMetadata("vanish").get(0).asBoolean())
-						player.hidePlayer(plugin, executor);
+			if (executor.hasPermission("honkore.vanish")) {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (executor.hasMetadata("vanish"))
+						if (executor.getMetadata("vanish").get(0).asBoolean())
+							player.hidePlayer(plugin, executor);
+				}
 			}
 		}
-		if(plugin.getConfig().getBoolean("join-leave")) {
-			String message = plugin.getConfig().getString("Messages.join-message");
+		if(plugin.config.getBoolean("join-leave")) {
+			String message = plugin.config.getString("Messages.join-message");
 
 			if(message == null) {
-				plugin.getLogger().warning("Join message has not been defined. Skipping...");
+				Component component = LegacyComponentSerializer.legacyAmpersand().deserialize("&cJoin message has not been defined. Please contact an admin.");
+				e.getPlayer().sendMessage(component);
 				return;
 			}
 

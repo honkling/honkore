@@ -13,7 +13,13 @@ public class ChatComposer implements io.papermc.paper.chat.ChatComposer {
 
 	@Override
 	public @NotNull Component composeChat(@NotNull Player player, @NotNull Component display, @NotNull Component message) {
-		String format = plugin.getConfig().getString("Messages.chat-format");
+		String format = plugin.config.getString("Messages.chat-format");
+
+		if(format == null) {
+			Component component = LegacyComponentSerializer.legacyAmpersand().deserialize("&cChat format message has not been defined. Please contact an admin.");
+			player.sendMessage(component);
+			return component;
+		}
 
 		Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(format);
 		component = Utils.translate(component, "\\{DISPLAYNAME\\}", LegacyComponentSerializer.legacyAmpersand().serialize(display));

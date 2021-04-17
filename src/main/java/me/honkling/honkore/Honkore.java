@@ -1,16 +1,19 @@
 package me.honkling.honkore;
 
+import me.honkling.honkore.commands.HonkoreCommand;
 import me.honkling.honkore.commands.moderation.ClearChat;
 import me.honkling.honkore.commands.moderation.MuteChat;
+import me.honkling.honkore.commands.moderation.punishments.*;
 import me.honkling.honkore.commands.report.ReportCommand;
 import me.honkling.honkore.commands.report.ReportsCommand;
 import me.honkling.honkore.commands.report.ResolveCommand;
 import me.honkling.honkore.commands.staffchat.StaffChatCommand;
 import me.honkling.honkore.commands.vanish.VanishCommand;
+import me.honkling.honkore.lib.Configuration;
 import me.honkling.honkore.listeners.ChatListener;
 import me.honkling.honkore.listeners.JoinListener;
+import me.honkling.honkore.listeners.LoginListener;
 import me.honkling.honkore.listeners.QuitListener;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.honkling.honkore.commands.utility.GamemodeCommand;
@@ -26,12 +29,13 @@ public final class Honkore extends JavaPlugin {
 
 	public boolean chatMuted = false;
 	public Connection conn = null;
+	public Configuration config;
 
 	@Override
 	public void onEnable() {
 		getLogger().info("honkore has enabled :)");
+		config = new Configuration();
 		saveDefaultConfig();
-		FileConfiguration config = getConfig();
 		if(config.getBoolean("chat-tools")) {
 			getCommand("mutechat").setExecutor(new MuteChat());
 			getCommand("clearchat").setExecutor(new ClearChat());
@@ -44,9 +48,9 @@ public final class Honkore extends JavaPlugin {
 			getCommand("sc").setExecutor(new StaffChatCommand());
 		}
 		if(config.getBoolean("report-system")) {
-			getCommand("report").setExecutor(new ReportCommand(this));
-			getCommand("reports").setExecutor(new ReportsCommand(this));
-			getCommand("resolve").setExecutor(new ResolveCommand(this));
+			getCommand("report").setExecutor(new ReportCommand());
+			getCommand("reports").setExecutor(new ReportsCommand());
+			getCommand("resolve").setExecutor(new ResolveCommand());
 		}
 		if(config.getBoolean("vanish-system")) {
 			getCommand("vanish").setExecutor(new VanishCommand());
@@ -55,9 +59,20 @@ public final class Honkore extends JavaPlugin {
 			getServer().getPluginManager().registerEvents(new JoinListener(), this);
 			getServer().getPluginManager().registerEvents(new QuitListener(), this);
 		}
-		if(config.getBoolean("staff-chat") || config.getBoolean("chat-tools") || config.getBoolean("chat-format")) {
+		if(config.getBoolean("staff-chat") || config.getBoolean("chat-tools") || config.getBoolean("chat-format") || config.getBoolean("punishment-system")) {
 			getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		}
+		if(config.getBoolean("punishment-system")) {
+			getCommand("ban").setExecutor(new BanCommand());
+			getCommand("mute").setExecutor(new MuteCommand());
+			getCommand("kick").setExecutor(new KickCommand());
+			getCommand("warn").setExecutor(new WarnCommand());
+			getCommand("unban").setExecutor(new UnbanCommand());
+			getCommand("unmute").setExecutor(new UnmuteCommand());
+			getCommand("punishments").setExecutor(new PunsCommand());
+			getServer().getPluginManager().registerEvents(new LoginListener(), this);
+		}
+		getCommand("honkore").setExecutor(new HonkoreCommand());
 		String dbUrl = String.format("jdbc:sqlite:%sinfo.db", getDataFolder() + File.separator);
 		try {
 			conn = DriverManager.getConnection(dbUrl);
@@ -76,7 +91,8 @@ public final class Honkore extends JavaPlugin {
 					"type TEXT NOT NULL," +
 					"date DATE NOT NULL," +
 					"expires DATE," +
-					"id TEXT NOT NULL" +
+					"id TEXT NOT NULL," +
+					"active INTEGER" +
 					")");
 		} catch (SQLException e) {
 			e.printStackTrace();

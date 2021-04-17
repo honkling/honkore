@@ -5,14 +5,11 @@ import me.honkling.honkore.lib.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public class VanishCommand implements CommandExecutor {
@@ -27,9 +24,10 @@ public class VanishCommand implements CommandExecutor {
 			boolean isEnabled = player.hasMetadata("vanish") && player.getMetadata("vanish").get(0).asBoolean();
 			player.setMetadata("vanish", new FixedMetadataValue(plugin, !isEnabled));
 
-			String message = plugin.getConfig().getString("Messages.vanish");
+			String message = plugin.config.getString("Messages.vanish");
 			if (message == null) {
-				plugin.getLogger().warning("Vanish message has not been defined. Skipping...");
+				Component component = LegacyComponentSerializer.legacyAmpersand().deserialize("&cVanish message has not been defined. Please contact an admin.");
+				sender.sendMessage(component);
 				return true;
 			}
 

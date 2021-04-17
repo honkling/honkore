@@ -6,11 +6,16 @@ utility-commands: true
 staff-chat: true
 join-leave: true
 chat-format: true
+punishment-system: true
 
 Messages:
 
+  # Error sent when a user is not online
+  not-online: "&3{PLAYER} 77is not online."
+  # {PLAYER} will be replaced with the name of the offline player
+
   # Message sent when someone tries to chat while the chat is muted
-  chat-muted: "&cChat is currently muted!"
+  chat-muted: "&cChat is currently muted."
 
   # Format for staff chat messages
   staff-chat: "&d[STAFF] &7{PLAYER}: {MESSAGE}"
@@ -22,21 +27,21 @@ Messages:
   # {STATE} will be replaced with "enabled" or "disabled"
 
   # Message sent when someone's fly mode is changed
-  set-fly: "&7Successfully {STATE} &3{PLAYER}&7's flight mode!"
+  set-fly: "&7Successfully {STATE} &3{PLAYER}&7's flight mode."
   # {STATE} will be replaced with "enabled" or "disabled"
   # {PLAYER} will be replaced with the player who had their fly mode changed
 
   # Message sent to the person when their flight mode has been changed
-  your-set-fly: "&7Your flight mode has been {STATE}!"
+  your-set-fly: "&7Your flight mode has been {STATE}."
   # {STATE} will be replaced with "enabled" or "disabled"
 
   # Message sent when someone's gamemode is changed
-  set-gamemode: "&7Successfully set &3{PLAYER}&7's gamemode to &3{GAMEMODE}&7!"
+  set-gamemode: "&7Successfully set &3{PLAYER}&7's gamemode to &3{GAMEMODE}&7."
   # {GAMEMODE} will be replaced with the gamemode that was set
   # {PLAYER} will be replaced with the player who's gamemode changed
 
   # Message sent to the person when their gamemode has been changed
-  your-set-gamemode: "&7Your gamemode has been set to &3{GAMEMODE}!"
+  your-set-gamemode: "&7Your gamemode has been set to &3{GAMEMODE}."
   # {GAMEMODE} will replaced with the gamemode that was set
 
   # Message sent when staff chat is toggled
@@ -44,13 +49,26 @@ Messages:
   # {STATE} will be replaced with "enabled" or "disabled"
 
   # Message sent after chat has been cleared
-  clear-chat: "&7Chat has been cleared by &3{PLAYER}"
+  clear-chat: "&7Chat has been cleared by &3{PLAYER}."
   # {PLAYER} will be replaced with the player who cleared the chat
 
   # Message sent when chat is muted
-  mute-chat: "&7Chat has been {STATE} by &3{PLAYER}"
+  mute-chat: "&7Chat has been {STATE} by &3{PLAYER}."
   # {STATE} will be replaced with "muted" or "unmuted"
   # {PLAYER} will be replaced with the player who muted or unmuted chat
+
+  # Message sent when reporting a user
+  reported-user-successfully: "&7A report against {PLAYER} has been sent to all online staff."
+  # {PLAYER} will be replaced with the user reported
+
+  # Message sent to staff when a user is reported
+  user-is-reported: "&3{AUTHOR} &7has filed a report against &3{USER} &7for &c{REASON}&7."
+  # {AUTHOR} will be replaced with the author of the report
+  # {USER} will be replaced with the user who was reported
+  # {REASON} will be replaced with the reason of the report
+
+  # Message sent when resolving a report
+  report-resolved: "&7Successfully resolved the report."
 
   # Chat format
   chat-format: "&7{DISPLAYNAME}: {MESSAGE}"
@@ -62,3 +80,24 @@ Messages:
   # Message sent when a user leaves
   quit-message: "&8[&c-&8] {DISPLAYNAME}"
   # {DISPLAYNAME} will be replaced the player's prefix (if any), the player's name, and the player's suffix (if any)
+
+  # Message sent to staff when a user is punished
+  punishment-issued: "&3{STAFF} &7{PUNISHMENT} &3{USER} &7for &c{REASON} &7[{LENGTH}&7]"
+  # {STAFF} will be replaced with the staff member who punished the user
+  # {PUNISHMENT} will be replaced with the type of punishment (banned, muted, etc)
+  # {USER} will be replaced with the user who was punished
+  # {REASON} will be replaced with the punishment reason
+  # {LENGTH} will be replaced with the length of the punishment
+
+  # Message sent to staff when a punishment is revoked
+  punishment-revoked: "&3{STAFF} &7{PUNISHMENT} &3{USER}"
+  # {STAFF} will be replaced with the staff member who punished the user
+  # {PUNISHMENT} will be replaced with the type of punishment (unbanned, unmuted, etc)
+  # {USER} will be replaced with the user who was punished
+
+  # Message sent when a punishment fails
+  punishment-failed: "&7Failed to issue punishment. ({ERROR})"
+  # {ERROR} will be replaced with the reason why the punishment failed
+
+  # Message sent when reloading honkore
+  honkore-reload: "&7Successfully reloaded honkore."

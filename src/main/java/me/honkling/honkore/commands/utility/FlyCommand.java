@@ -1,18 +1,16 @@
 package me.honkling.honkore.commands.utility;
 
 import me.honkling.honkore.Honkore;
+import me.honkling.honkore.lib.Configuration;
 import me.honkling.honkore.lib.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public class FlyCommand implements CommandExecutor {
@@ -27,11 +25,11 @@ public class FlyCommand implements CommandExecutor {
 		}
 
 		Player player = (Player) sender;
-		FileConfiguration config = plugin.getConfig();
+		Configuration config = plugin.config;
 
 		Component setFlyComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.set-fly"));
 		Component yourFlySetComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.your-set-fly"));
-		Component notOnlineComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Utils.getNotOnlineMessage());
+		Component notOnlineComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.not-online"));
 
 		if(args.length > 0) {
 			boolean online = false;

@@ -57,6 +57,45 @@ commands:
     usage: §c/vanish
     permission: honkore.vanish
     permission-message: §cInsufficient permissions!
+  ban:
+    description: Ban a user.
+    usage: §c/ban (player) (length OR forever) (reason)
+    permission: honkore.punish
+    permission-message: §cInsufficient permissions!
+  mute:
+    description: Mute a user.
+    usage: §c/mute (player) (length OR forever) (reason)
+    permission: honkore.punish
+    permission-message: §cInsufficient permissions!
+  kick:
+    description: Kick a user.
+    usage: §c/kick (player) (reason)
+    permission: honkore.punish
+    permission-message: §cInsufficient permissions!
+  warn:
+    description: Warn a user.
+    usage: §c/warn (player) (reason)
+    permission: honkore.punish
+    permission-message: §cInsufficient permissions!
+  unban:
+    description: Unban a user.
+    usage: §c/unban (player)
+    permission: honkore.punish
+    permission-message: §cInsufficient permissions!
+  unmute:
+    description: Unmute a user.
+    usage: §c/unmute (player)
+    permission: honkore.punish
+    permission-message: §cInsufficient permissions!
+  punishments:
+    description: View the punishments of a user.
+    usage: §c/punishments (player)
+    aliases: ["puns"]
+    permission: honkore.punish
+    permission-message: §cInsufficient permissions!
+  honkore:
+    description: Reload honkore.
+    usage: §c/honkore reload
 
 permissions:
   honkore.vanish:
@@ -76,6 +115,10 @@ permissions:
   honkore.gamemode:
     description: Allows you to access gamemode commands
   honkore.fly:
-    description: Allows you to fly like a birdie
+    description: Allows you to fly
+  honkore.punish:
+    description: Allows you to punish users
+  honkore.honkore:
+    description: Allows you to reload Honkore
   honkore.*:
-    children: [honkore.fly, honkore.gamemode, honkore.mutechat, honkore.staffchat, honkore.report, honkore.clearchat, honkore.resolve, honkore.reports, honkore.vanish]
+    children: [honkore.honkore, honkore.punish, honkore.fly, honkore.gamemode, honkore.mutechat, honkore.staffchat, honkore.report, honkore.clearchat, honkore.resolve, honkore.reports, honkore.vanish]
