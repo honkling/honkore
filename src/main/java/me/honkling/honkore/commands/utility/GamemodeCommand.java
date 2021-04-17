@@ -1,6 +1,7 @@
 package me.honkling.honkore.commands.utility;
 
 import me.honkling.honkore.Honkore;
+import me.honkling.honkore.lib.Configuration;
 import me.honkling.honkore.lib.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -9,7 +10,6 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,11 +25,11 @@ public class GamemodeCommand implements CommandExecutor {
 		}
 
 		Player player = (Player) sender;
-		FileConfiguration config = plugin.getConfig();
+		Configuration config = plugin.config;
 
 		Component setGamemodeComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.set-gamemode"));
 		Component yourSetGamemodeComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.your-set-gamemode"));
-		Component notOnlineComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Utils.getNotOnlineMessage());
+		Component notOnlineComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(config.getString("Messages.not-online"));
 
 		Player target = Bukkit.getPlayer(args.length > 0 ? args[0] : player.getName());
 

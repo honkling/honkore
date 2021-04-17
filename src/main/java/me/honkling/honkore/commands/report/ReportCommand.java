@@ -1,6 +1,9 @@
 package me.honkling.honkore.commands.report;
 
 import me.honkling.honkore.Honkore;
+import me.honkling.honkore.lib.Utils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,18 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.Instant;
 
 public class ReportCommand implements CommandExecutor {
 
-	private Honkore plugin;
-
-	public ReportCommand(Honkore plugin) {
-		this.plugin = plugin;
-	}
+	private final Honkore plugin = Honkore.getInstance();
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
@@ -44,43 +41,62 @@ public class ReportCommand implements CommandExecutor {
 					sb.append(args[index] + " ");
 				}
 			}
+			Player user = Bukkit.getPlayer(args[0]);
+			if(!user.isOnline()) {
+				String message = plugin.getConfig().getString("Messages.not-online");
+
+				if(message == null) {
+					plugin.getLogger().warning("Not online message has not been defined. Skipping...");
+					return true;
+				}
+
+				Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+				component = Utils.translate(component, "\\{PLAYER\\}", user.getName());
+
+				p.sendMessage(component);
+			}
 			try {
 				PreparedStatement stmt = conn.prepareStatement("INSERT INTO reports (user, reporter, reason, date, id)" +
 						"VALUES(?, ?, ?, ?, ?)");
-				stmt.setString(1, args[0]);
-				stmt.setString(2, p.getName());
+				stmt.setString(1, user.getUniqueId().toString());
+				stmt.setString(2, p.getUniqueId().toString());
 				stmt.setString(3, sb.toString().trim());
 				stmt.setDate(4, new java.sql.Date(Instant.now().getEpochSecond() * 1000));
-				stmt.setString(5, this.generateID());
+				stmt.setString(5, Utils.generateID());
 				stmt.executeUpdate();
-				Bukkit.broadcast(String.format("§3%s §7has filed a report against §3%s §7for §c%s§7.", p.getName(), args[0], sb.toString().trim()), "honkore.reports");
-				p.sendMessage(String.format("§7A report against %s has been sent to all online staff.", args[0]));
+
+				String staffReportMSG = plugin.config.getString("Messages.user-is-reported");
+
+				if(staffReportMSG == null) {
+					Component component = LegacyComponentSerializer.legacyAmpersand().deserialize("&cStaff user report message has not been defined. Please contact an admin.");
+					sender.sendMessage(component);
+					return true;
+				}
+
+				Component staffReport = LegacyComponentSerializer.legacyAmpersand().deserialize(staffReportMSG);
+				staffReport = Utils.translate(staffReport, "\\{AUTHOR\\}", p.getName());
+				staffReport = Utils.translate(staffReport, "\\{USER\\}", user.getName());
+				staffReport = Utils.translate(staffReport, "\\{REASON\\}", sb.toString().trim());
+
+				String userReportMSG = plugin.config.getString("Messages.reported-user-successfully");
+
+				if(userReportMSG == null) {
+					Component component = LegacyComponentSerializer.legacyAmpersand().deserialize("&cUser reported message has not been defined. Please contact an admin.");
+					sender.sendMessage(component);
+					return true;
+				}
+
+				Component userReport = LegacyComponentSerializer.legacyAmpersand().deserialize(userReportMSG);
+				userReport = Utils.translate(userReport, "\\{PLAYER\\}", user.getName());
+
+				Bukkit.broadcast(staffReport, "honkore.reports");
+				p.sendMessage(userReport);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
 		}
 		return true;
-	}
-
-	private String generateID() {
-		String[] charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
-		String result = "";
-		for(int i = 0; i < 4; i++) {
-			result = result + charset[(int) Math.round(Math.random()*charset.length)];
-		}
-		Connection conn = this.plugin.conn;
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM reports WHERE id = \"%s\"", result));
-			if(rs.next()) {
-				return this.generateID();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return result;
-		}
-		return result;
 	}
 
 }

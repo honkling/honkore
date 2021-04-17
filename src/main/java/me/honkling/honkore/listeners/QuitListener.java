@@ -16,7 +16,7 @@ public class QuitListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent e) {
-		if(plugin.getConfig().getBoolean("vanish-system")) {
+		if(plugin.config.getBoolean("vanish-system")) {
 			Player p = e.getPlayer();
 			p.removeMetadata("vanish", plugin);
 
@@ -24,11 +24,12 @@ public class QuitListener implements Listener {
 				member.showPlayer(plugin, p);
 			}
 		}
-		if(plugin.getConfig().getBoolean("join-leave")) {
-			String message = plugin.getConfig().getString("Messages.quit-message");
+		if(plugin.config.getBoolean("join-leave")) {
+			String message = plugin.config.getString("Messages.quit-message");
 
 			if(message == null) {
-				plugin.getLogger().warning("Quit message has not been defined. Skipping...");
+				Component component = LegacyComponentSerializer.legacyAmpersand().deserialize("&cQuit message has not been defined. Please contact an admin.");
+				e.getPlayer().sendMessage(component);
 				return;
 			}
 

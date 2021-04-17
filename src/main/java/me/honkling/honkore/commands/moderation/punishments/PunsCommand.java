@@ -1,4 +1,4 @@
-package me.honkling.honkore.commands.report;
+package me.honkling.honkore.commands.moderation.punishments;
 
 import me.honkling.honkore.Honkore;
 import me.honkling.honkore.lib.Menu;
@@ -15,23 +15,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ReportsCommand implements CommandExecutor {
+public class PunsCommand implements CommandExecutor {
 
 	private final Honkore plugin = Honkore.getInstance();
+	private Player p;
+	private OfflinePlayer user;
 
 	@Override
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+		if(args.length <= 0) return false;
 		if(sender instanceof Player) {
-			Player p = (Player) sender;
+			p = (Player) sender;
+			user = Bukkit.getOfflinePlayer(args[0]);
 			Connection conn = plugin.conn;
 			Menu gui = createPage(conn);
 			assert gui != null;
@@ -43,33 +44,34 @@ public class ReportsCommand implements CommandExecutor {
 	@SuppressWarnings("deprecation")
 	private Menu createPage(Connection conn) {
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM reports");
-			Menu gui = new Menu(this.plugin, InventoryType.CHEST, 6, "Viewing all reports");
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM punishments WHERE user = ?");
+			stmt.setString(1, user.getUniqueId().toString());
+			ResultSet rs = stmt.executeQuery();
+			Menu gui = new Menu(plugin, InventoryType.CHEST, 6, "Viewing all punishments of " + user.getName());
 			setupPage(gui);
 			List<String> rows = new ArrayList<>();
 			while(rs.next()) rows.add(rs.getString("user"));
-			rs = stmt.executeQuery("SELECT * FROM reports");
+			rs = stmt.executeQuery();
 			rs.next();
 			int listSize = rows.size();
 			if(listSize <= 0) return gui;
 			for(int i = 0; i < 54 && i <= listSize; i++) {
-				OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(rs.getString("user")));
-				ItemStack reportItem = new ItemStack(Material.PLAYER_HEAD);
-				SkullMeta reportMeta = (SkullMeta) reportItem.getItemMeta();
-				reportMeta.setOwningPlayer(player);
-				reportMeta.setDisplayName("§3" + player.getName());
+				OfflinePlayer mod = Bukkit.getOfflinePlayer(UUID.fromString(rs.getString("moderator")));
+				ItemStack punishmentItem = new ItemStack(Material.PLAYER_HEAD);
+				SkullMeta punishmentMeta = (SkullMeta) punishmentItem.getItemMeta();
+				punishmentMeta.setOwningPlayer(mod);
+				punishmentMeta.setDisplayName("§3" + mod.getName());
 				List<String> lore = new ArrayList<>();
-				lore.add("§7User reported: §3" + player.getName());
-				lore.add("§7Report author: §3" + Bukkit.getOfflinePlayer(UUID.fromString(rs.getString("reporter"))));
+				lore.add("§7Moderator: §3" + mod.getName());
 				lore.add("§7Reason: §3" + rs.getString("reason"));
 				lore.add("§7Date: §3" + rs.getDate("date").toString());
+				lore.add("§7Expires at: §3" + rs.getDate("expires").toString());
+				lore.add("§7Type: §3" + rs.getString("type"));
 				lore.add("§7ID: §3" + rs.getString("id"));
-				lore.add(" ");
-				lore.add(String.format("§7Run §3/resolve %s §7to resolve the report.", rs.getString("id")));
-				reportMeta.setLore(lore);
-				reportItem.setItemMeta(reportMeta);
-				gui.getSlot(gui.getFirstEmptySlot()).setItem(reportItem);
+				lore.add("§7Active?: §3" + (rs.getInt("active") == 1 ? "Yes" : "No"));
+				punishmentMeta.setLore(lore);
+				punishmentItem.setItemMeta(punishmentMeta);
+				gui.getSlot(gui.getFirstEmptySlot()).setItem(punishmentItem);
 				if(!rs.next()) break;
 			}
 			return gui;
@@ -98,4 +100,5 @@ public class ReportsCommand implements CommandExecutor {
 			gui.getSlot(i).setItem(pane);
 		}
 	}
+
 }
