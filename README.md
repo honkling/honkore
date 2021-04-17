@@ -16,7 +16,7 @@ A Minecraft server core made by [honkling](https://github.com/honkling).
 - [x] Chat Moderation
 - [x] Utility Commands
 - [x] Staff Chat
-- [ ] Punishment System
+- [x] Punishment System
 - [ ] Kits
 - [ ] Tab & Scoreboard
 - [ ] Economy
