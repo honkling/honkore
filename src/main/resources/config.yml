@@ -11,7 +11,7 @@ punishment-system: true
 Messages:
 
   # Error sent when a user is not online
-  not-online: "&3{PLAYER} 77is not online."
+  not-online: "&3{PLAYER} &7is not online."
   # {PLAYER} will be replaced with the name of the offline player
 
   # Message sent when someone tries to chat while the chat is muted
