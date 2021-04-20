@@ -1,9 +1,9 @@
 # Table of Contents
 
-- [Table of Contents](https://github.com/honkling/honkore/tree/readme/#table-of-contents)
-- [Introduction](https://github.com/honkling/honkore/tree/readme#introduction)
-- [Installing](https://github.com/honkling/honkore/tree/readme/#installing)
-- [Contributing](https://github.com/honkling/honkore/tree/readme#contributing)
+- [Table of Contents](https://github.com/honkling/honkore#table-of-contents)
+- [Introduction](https://github.com/honkling/honkore#introduction)
+- [Installing](https://github.com/honkling/honkore#installing)
+- [Contributing](https://github.com/honkling/honkore#contributing)
 
 # Introduction
 
@@ -17,13 +17,16 @@ A Minecraft server core made by [honkling](https://github.com/honkling).
 - [x] Utility Commands
 - [x] Staff Chat
 - [x] Punishment System
+- [x] Join and Leave Messages
+- [x] Chat format
+- [ ] Skript Support
 - [ ] Kits
 - [ ] Tab & Scoreboard
 - [ ] Economy
 
 # Installing
 
-- Download the latest version of honkore from [the Releases page](https://github.com/honkling/honkore) (NOTE: honkore likely will not support older versions than 1.16).
+- Download the latest version of honkore from [the Releases page](https://github.com/honkling/honkore/releases) (NOTE: honkore likely will not support older versions than 1.16).
 - Place the downloaded jar into your server's plugins folder.
 - Restart your server.
 
