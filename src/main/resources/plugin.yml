@@ -4,7 +4,6 @@ main: me.honkling.honkore.Honkore
 api-version: 1.16
 prefix: honkore
 authors: [ honkling, Bluberriess ]
-depend: [ Vault ]
 website: https://github.com/honkling/honkore
 description: A Minecraft server core made by https://github.com/honkling
 
