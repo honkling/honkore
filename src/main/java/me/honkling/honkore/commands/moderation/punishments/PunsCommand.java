@@ -65,10 +65,10 @@ public class PunsCommand implements CommandExecutor {
 				lore.add("§7Moderator: §3" + mod.getName());
 				lore.add("§7Reason: §3" + rs.getString("reason"));
 				lore.add("§7Date: §3" + rs.getDate("date").toString());
-				lore.add("§7Expires at: §3" + rs.getDate("expires").toString());
+				if(!rs.getString("type").equals("KICK") && !rs.getString("type").equals("WARN")) lore.add("§7Expires at: §3" + rs.getDate("expires").toString());
 				lore.add("§7Type: §3" + rs.getString("type"));
 				lore.add("§7ID: §3" + rs.getString("id"));
-				lore.add("§7Active?: §3" + (rs.getInt("active") == 1 ? "Yes" : "No"));
+				if(!rs.getString("type").equals("KICK") && !rs.getString("type").equals("WARN")) lore.add("§7Active?: §3" + (rs.getInt("active") == 1 ? "Yes" : "No"));
 				punishmentMeta.setLore(lore);
 				punishmentItem.setItemMeta(punishmentMeta);
 				gui.getSlot(gui.getFirstEmptySlot()).setItem(punishmentItem);

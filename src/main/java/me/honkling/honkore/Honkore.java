@@ -1,5 +1,7 @@
 package me.honkling.honkore;
 
+import ch.njol.skript.Skript;
+import ch.njol.skript.SkriptAddon;
 import me.honkling.honkore.commands.HonkoreCommand;
 import me.honkling.honkore.commands.moderation.ClearChat;
 import me.honkling.honkore.commands.moderation.MuteChat;
@@ -20,6 +22,7 @@ import me.honkling.honkore.commands.utility.GamemodeCommand;
 import me.honkling.honkore.commands.utility.FlyCommand;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,6 +33,7 @@ public final class Honkore extends JavaPlugin {
 	public boolean chatMuted = false;
 	public Connection conn = null;
 	public Configuration config;
+	public SkriptAddon addon;
 
 	@Override
 	public void onEnable() {
@@ -71,6 +75,22 @@ public final class Honkore extends JavaPlugin {
 			getCommand("unmute").setExecutor(new UnmuteCommand());
 			getCommand("punishments").setExecutor(new PunsCommand());
 			getServer().getPluginManager().registerEvents(new LoginListener(), this);
+		}
+		if(config.getBoolean("skript-hooks")) {
+			Runnable func = () -> {
+				if(!getServer().getPluginManager().isPluginEnabled("Skript")) {
+					getLogger().warning("The Skript plugin isn't enabled! Skript hooks will not be registered.");
+					return;
+				}
+				addon = Skript.registerAddon(this);
+				try {
+					addon.loadClasses("me.honkling.honkore", "elements");
+				} catch (IOException e) {
+					getLogger().warning("Failed to register Skript hooks. Please view the stack trace below.");
+					e.printStackTrace();
+				}
+			};
+			func.run();
 		}
 		getCommand("honkore").setExecutor(new HonkoreCommand());
 		String dbUrl = String.format("jdbc:sqlite:%sinfo.db", getDataFolder() + File.separator);

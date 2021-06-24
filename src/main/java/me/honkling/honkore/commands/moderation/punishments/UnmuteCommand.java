@@ -24,8 +24,9 @@ public class UnmuteCommand implements CommandExecutor {
 		if(args.length < 1) return false;
 		OfflinePlayer user = Bukkit.getOfflinePlayer(args[0]);
 		try {
-			PreparedStatement stmt = plugin.conn.prepareStatement("SELECT * FROM punishments WHERE user = ? AND active = 1");
+			PreparedStatement stmt = plugin.conn.prepareStatement("SELECT * FROM punishments WHERE user = ? AND active = 1 AND type = ?");
 			stmt.setString(1, user.getUniqueId().toString());
+			stmt.setString(2, "MUTE");
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				stmt = plugin.conn.prepareStatement("UPDATE punishments SET active = 0 WHERE id = ?");
