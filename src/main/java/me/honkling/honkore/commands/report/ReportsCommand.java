@@ -61,7 +61,7 @@ public class ReportsCommand implements CommandExecutor {
 				reportMeta.setDisplayName("§3" + player.getName());
 				List<String> lore = new ArrayList<>();
 				lore.add("§7User reported: §3" + player.getName());
-				lore.add("§7Report author: §3" + Bukkit.getOfflinePlayer(UUID.fromString(rs.getString("reporter"))));
+				lore.add("§7Report author: §3" + Bukkit.getOfflinePlayer(UUID.fromString(rs.getString("reporter"))).getName());
 				lore.add("§7Reason: §3" + rs.getString("reason"));
 				lore.add("§7Date: §3" + rs.getDate("date").toString());
 				lore.add("§7ID: §3" + rs.getString("id"));
