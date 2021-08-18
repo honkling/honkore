@@ -2,7 +2,7 @@ package me.honkling.honkore.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.honkling.honkore.Honkore;
-import me.honkling.honkore.lib.ChatComposer;
+import me.honkling.honkore.lib.ChatRenderer;
 import me.honkling.honkore.lib.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -57,8 +57,8 @@ public class ChatListener implements Listener {
 				return;
 			}
 
-			ChatComposer composer = new ChatComposer();
-			e.composer(composer);
+			ChatRenderer renderer = new ChatRenderer();
+			e.renderer(renderer);
 		}
 		if(plugin.getConfig().getBoolean("punishment-system")) {
 			try {
