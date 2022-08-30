@@ -1,9 +1,9 @@
 # Table of Contents
 
-- [Table of Contents](https://github.com/honkling/honkore#table-of-contents)
-- [Introduction](https://github.com/honkling/honkore#introduction)
-- [Installing](https://github.com/honkling/honkore#installing)
-- [Contributing](https://github.com/honkling/honkore#contributing)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Installing](#installing)
+- [Contributing](#contributing)
 
 # Introduction
 
